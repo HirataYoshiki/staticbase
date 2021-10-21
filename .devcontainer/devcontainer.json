@@ -1,0 +1,12 @@
+{
+    "name": "StaticBase",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "web",
+    "workspaceFolder": "/app",
+    "extensions": [
+        "octref.vetur"
+    ],
+    "settings": {
+        "editor.tabSize": 2
+    }
+}
