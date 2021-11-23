@@ -1,11 +1,10 @@
 <template>
-  <b-form-file
-    v-model="csv"
-    :state="Boolean(csv)"
-    placeholder="Choose a file or drop it here..."
+  <v-file-input
+    label="Choose a csv file..."
     accept=".csv"
-    @change="onFileChange"
-  ></b-form-file>
+    v-model="csv"
+    v-on:change="onFileChange"
+  ></v-file-input>
 </template>
 <script>
   export default {
@@ -26,16 +25,25 @@
       }
     },
     methods: {
-      onFileChange: async function (e) {
-        var c = e.target.files[0]
-        c.text().then((text) => {
-          var csvStructure = text.split('\n').map((line) => {
-            return line.split(',')
-          })
-          this.csvStructure = csvStructure
-          this.csvContentSetter(csvStructure)
+      onFileChange: async function (file) {
+        const result = await new Promise((resolve) => {
+          var reader = new FileReader()
+          reader.readAsText(file)
+          reader.onload = () => {
+            resolve(reader.result)
+          }
         })
+
+        if (!this.csv) {
+          this.csvStructure = null
+          return
+        }
+        this.csvStructure = result.split('\n').map((line) => {
+          return line.split(',')
+        })
+        this.csvContentSetter(this.csvStructure)
+    
       }
-    } 
+    }
   }  
 </script>

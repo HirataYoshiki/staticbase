@@ -8,4 +8,4 @@ RUN apk update && \
 
 WORKDIR /app
 COPY ./app .
-WORKDIR /app/staticbase
+WORKDIR /staticbase
