@@ -21,31 +21,20 @@
     },
     data () {
       return {
-        headers: null,
-        items: null
+        headers: [],
+        items: [],
+        id: null
       }
     },
     watch:{
       result_id: function (val) {
-        this.result_id = val
+        this.id = val
       },
       eda_headers: function (val) {
-        this.eda_headers = val
-        this.headers = this.eda_headers
-        this.headers.unshift(
-          {
-            text: '',
-            value: 'item'
-          }
-        )
+        this.headers = val
       },
       eda_items: function (val) {
-        const itemList = ['サンプル数','平均', '分散', '標準偏差']
-        this.eda_items = val
-        this.items = this.eda_items
-        this.items.forEach((obj,i) => {
-          obj.item = itemList[i]
-        })
+        this.items = val
       }
     }
   }

@@ -4,7 +4,7 @@
     <h2>ファイルを選択してデータを読み込む</h2>
     <v-container fluid>
       <v-row justify="content-md-center">
-        <v-col md="4" cols="12" class="mr-2">
+        <v-col md="5" cols="12" class="mr-2">
           <v-form ref="form">
             <v-text-field
               v-model="input.title"
@@ -17,7 +17,11 @@
             <csvLoader
               :csvContentSetter="csvSetter"
             />
-            <v-btn class="mr-4" @click="calculate" color="primary">Calculate</v-btn>
+            <v-btn
+              class="mr-4" 
+              @click="calculate"
+              :color="view.items.length == 0?'gray':'primary'"
+              :disabled="view.items.length == 0">Calculate</v-btn>
             <v-btn class="mr-4" @click="reset" color="pink">Reset</v-btn>
           </v-form>
           <v-data-table
@@ -26,8 +30,18 @@
             :items-per-page="10"
           />
         </v-col>
-        <v-col md="4" cols="12" v-if="results">
-          <Result :eda_items="results" :eda_headers="view.fields" :result_id="'preview'"/>
+        <v-col md="5" cols="12" v-if="results.items">
+          <div name="result">
+            <div name="eda">
+              <v-data-table
+                :headers="results.headers"
+                :items="results.items"
+              />
+            </div>
+            <div name="line-graph">
+
+            </div>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -37,12 +51,10 @@
 <script>
 import csvLoader from '/app/staticbase/src/components/csvLoader.vue'
 import Calcs from '@/statics/calcs.js'
-import Result from '@/views/Result.vue'
   export default {
     name: 'Home',
     components: {
-      csvLoader,
-      Result
+      csvLoader
     },
     data () {
       return {
@@ -58,7 +70,10 @@ import Result from '@/views/Result.vue'
           items: [],
           fields: []
         },
-        results: null
+        results: {
+          headers: [],
+          items: []
+        }
       }
     },
     methods: {
@@ -84,7 +99,8 @@ import Result from '@/views/Result.vue'
       },
       calculate () {
         var c = new Calcs(this.raw.fields, this.raw.items)
-        this.results = c.getEDA()
+        this.results.items = c.getEDA()
+        this.results.headers = c.fieldsForResult
       },
       reset () {
         this.input = {
@@ -95,7 +111,10 @@ import Result from '@/views/Result.vue'
         this.raw.items = []
         this.view.fields = []
         this.raw.fields = []
-        this.results = null
+        this.results = {
+          headers: null,
+          items: null 
+        }
       }
     }
   }
