@@ -4,6 +4,7 @@ export default class Calcs {
   constructor (fields = [], items = []) {
     this.fields = fields
     this.items = this._convertItems(items)
+    this.fieldsForResult = this._getFieldsForResult(fields)
   }
 
   _convertItems (items) {
@@ -12,6 +13,14 @@ export default class Calcs {
       return line.map((e) => Number(e))
     })
     return j
+  }
+
+  _getFieldsForResult (fields = []) {
+    var res = [{text: '', value: 'item'}]
+    fields.forEach((field) => {
+      res.push({text: field, value: field})
+    })
+    return res
   }
 
   _getStraightLine (field) {
@@ -43,10 +52,10 @@ export default class Calcs {
   }
 
   getEDA () {
-    var counts = {}
-    var averages = {}
-    var variances = {}
-    var stdevs = {}
+    var counts = {item: 'サンプル数'}
+    var averages = {item: '平均'}
+    var variances = {item: '分散'}
+    var stdevs = {item: '標準偏差'}
 
     this.fields.forEach((field) => {
       var itemLine = this._getStraightLine(field)
