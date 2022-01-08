@@ -73,6 +73,10 @@ import Calcs from '@/statics/calcs.js'
         results: {
           headers: [],
           items: []
+        },
+        sparkline: {
+          choice: null,
+          value: []
         }
       }
     },
